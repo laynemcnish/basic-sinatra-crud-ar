@@ -11,7 +11,14 @@ class App < Sinatra::Application
   get "/" do
 
     erb :signed_out
-    end
+  end
 
+  get '/register' do
+   erb :registrations
+  end
+
+  post "/register" do
+    redirect "/"
+  end
 
 end
