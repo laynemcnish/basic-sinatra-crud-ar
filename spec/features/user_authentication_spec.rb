@@ -14,6 +14,20 @@ feature "Registration" do
     fill_in "username", with: "User"
     fill_in "password", with: "Password"
     click_button "Register"
+    page.has_content?('Thanks for registering!')
   end
 end
 
+feature "Login" do
+  scenario "I can log into the homepage" do
+  visit "/"
+  fill_in "username", with: "User"
+  fill_in "password", with: "Password"
+  click_button "Sign In"
+  page.has_content?("Welcome")
+  save_and_open_page
+end
+
+
+
+end

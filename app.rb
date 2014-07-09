@@ -1,15 +1,18 @@
 require "sinatra"
 require "active_record"
 require "./lib/database_connection"
+require "rack-flash"
 
 class App < Sinatra::Application
+  enable :sessions
+  use Rack::Flash
+
   def initialize
     super
     @database_connection = DatabaseConnection.new(ENV["RACK_ENV"])
   end
 
   get "/" do
-
     erb :signed_out
   end
 
@@ -17,8 +20,28 @@ class App < Sinatra::Application
    erb :registrations
   end
 
+  get "/sessions" do
+
+  end
+
   post "/register" do
+    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}', '#{params[:password]}')")
+    flash[:notice] = "Thanks for registering!"
     redirect "/"
+  end
+
+  post '/sessions' do
+    user = find_user(params[:username], params[:password])[0]
+    if user == nil
+      flash[:notice] = "Login info incorrect!"
+    else
+      session[:user] = user
+    end
+    redirect "/"
+  end
+
+  def find_user(username, password)
+    @database_connection.sql("SELECT * FROM users WHERE username = '#{username}' AND password = '#{password}'")
   end
 
 end

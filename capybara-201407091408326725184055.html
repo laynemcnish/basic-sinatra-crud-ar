@@ -1,16 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Authentication</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
 
-<%unless session[:user] == nil%>
 
-  <h1>Welcome, </h1>
-  <a href="/sign_out">Sign Out</a>
 
-  <% end %>
 
-<%if session[:user] == nil%>
 
-<% if flash[:notice] %>
-  <p class="flash"><%= flash[:notice] %></p>
-  <% end %>
+
+
 
 <a href="/register"><button class="button">Register</button></a>
 
@@ -20,13 +21,15 @@
   <table>
     <tbody>
     <tr><td><label for="username">Username</label></td>
-    <td><input name="username" id="username" type="text"></td></tr>
+    <td><input id="username" type="text"></td></tr>
     <tr><td><label for="password">Password</label></td>
-    <td><input name="password" id="password" type = "password"></td></tr>
+    <td><input id="password" type = "password"></td></tr>
 </tbody>
 </table>
 <input class="button" type="submit" value="Sign In" />
 
 </form>
 
-<%end%>
+
+</body>
+</html>
