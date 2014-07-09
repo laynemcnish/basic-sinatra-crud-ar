@@ -24,8 +24,9 @@ feature "Login" do
   fill_in "username", with: "User"
   fill_in "password", with: "Password"
   click_button "Sign In"
-  page.has_content?("Welcome, User")
+  page.has_content?("User", count: 1)
   page.has_content?("Username")
+  save_and_open_page
 
 end
 
