@@ -13,7 +13,8 @@ class App < Sinatra::Application
   end
 
   get "/" do
-    erb :signed_out
+    @users = @database_connection.sql("SELECT username from users").collect {|hash| hash["username"]}
+    erb :signed_out, :locals => {:users => @users}
   end
 
   get '/register' do

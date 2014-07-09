@@ -25,6 +25,7 @@ feature "Login" do
   fill_in "password", with: "Password"
   click_button "Sign In"
   page.has_content?("Welcome, User")
+  page.has_content?("Username")
 
 end
 
@@ -56,5 +57,7 @@ feature "Registration not filled in error" do
     page.has_content?('fill in')
   end
 end
+
+
 
 end
