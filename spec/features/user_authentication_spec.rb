@@ -39,5 +39,22 @@ feature "Logout" do
   end
 end
 
+feature "Registration errors" do
+  scenario "If we try to register a name that's already taken, we get an error" do
+    visit "/register"
+    fill_in "username", with: "User"
+    fill_in "password", with: "Password"
+    page.has_content?('taken')
+  end
+end
+
+feature "Registration not filled in error" do
+  scenario "If we don't fill in form, we get an error" do
+    visit "/register"
+    fill_in "username", with: ""
+    fill_in "password", with: ""
+    page.has_content?('fill in')
+  end
+end
 
 end
