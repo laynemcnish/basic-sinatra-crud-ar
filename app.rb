@@ -13,7 +13,8 @@ class App < Sinatra::Application
   end
 
   get "/" do
-    @users = @database_connection.sql("SELECT username from users").collect { |hash| hash["username"] }
+    @users = user_setter
+    @users = @database_connection.sql("SELECT username from users ORDER BY username ASC").collect { |hash| hash["username"] } if session[:order]
     erb :signed_out, :locals => {:users => @users}
   end
 
@@ -29,18 +30,18 @@ class App < Sinatra::Application
     if (params[:username] || params[:password]) == ""
       flash[:error] = "Please fill in all fields."
       redirect "/register"
-    elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username]}'") != []
+    elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username.downcase]}'") != []
       flash[:error] = "Username is already taken."
       redirect "/register"
     end
 
-    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}', '#{params[:password]}')")
+    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username].downcase}', '#{params[:password]}')")
     flash[:notice] = "Thanks for registering!"
     redirect "/"
   end
 
   post '/sessions' do
-    user = find_user(params[:username], params[:password])[0]
+    user = find_user(params[:username].downcase, params[:password])[0]
     if user == nil
       flash[:notice] = "Login info incorrect!"
     else
@@ -55,11 +56,21 @@ class App < Sinatra::Application
 
   post '/log_out' do
     session.delete(:user)
+    session.delete(:order)
     redirect "/"
   end
 
   def find_user(username, password)
-    @database_connection.sql("SELECT * FROM users WHERE username = '#{username}' AND password = '#{password}'")
+    @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password}'")
+  end
+
+  post '/order' do
+    session[:order] = true
+    redirect "/"
+  end
+
+  def user_setter
+    @database_connection.sql("SELECT username from users").collect { |hash| hash["username"] }
   end
 
 end

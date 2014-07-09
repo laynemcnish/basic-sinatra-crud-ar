@@ -26,7 +26,7 @@ feature "Login" do
   click_button "Sign In"
   page.has_content?("User", count: 1)
   page.has_content?("Username")
-  save_and_open_page
+
 
 end
 
@@ -59,6 +59,25 @@ feature "Registration not filled in error" do
   end
 end
 
+  feature "Order names" do
+    scenario "User can sort names" do
+      visit "/"
+      click_link "Register"
+        fill_in "username", with: "z"
+        fill_in "password", with: "z"
+        click_button "Register"
+      visit "/register"
+      fill_in "username", with: "a"
+      fill_in "password", with: "a"
+      click_button "Register"
+      fill_in "username", with: "User"
+      fill_in "password", with: "Password"
+      visit "/"
+      click_button "Sign In"
+      click_button "Alphabetize"
+      page.should have_tag("ul:last-child", :text => "z")
 
+    end
+end
 
 end

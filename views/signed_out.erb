@@ -6,14 +6,20 @@
   </form>
 
   <h1>Other Users:</h1>
-
   <ul>
     <% @users.each do |user| %>
-      <% unless user == (session[:user]["username"] || [:user]["username"] == "gschool" )%>
-        <li><%= user %></li>
+      <% unless user == (session[:user]["username"]) %>
+        <li>
+          <%= user %>
+        </li>
       <% end %>
-      </ul>
+
     <% end %>
+  </ul>
+
+  <form method="post" action="/order">
+    <input class="button" type="submit" value="Alphabetize"/>
+  </form>
 
 <% end %>
 
