@@ -9,6 +9,9 @@ class App < Sinatra::Application
   end
 
   get "/" do
-    "Hello"
-  end
+
+    erb :signed_out
+    end
+
+
 end
