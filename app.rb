@@ -69,6 +69,11 @@ class App < Sinatra::Application
     redirect "/"
   end
 
+  post '/delete' do
+    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username_to_delete]}'")
+    redirect "/"
+  end
+
   def user_setter
     @database_connection.sql("SELECT username from users").collect { |hash| hash["username"] }
   end

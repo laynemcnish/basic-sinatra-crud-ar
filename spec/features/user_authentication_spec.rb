@@ -26,7 +26,7 @@ feature "Login" do
   click_button "Sign In"
   page.has_content?("User", count: 1)
   page.has_content?("Username")
-
+  end
 
 end
 
@@ -78,6 +78,17 @@ end
       page.should have_tag("ul:last-child", :text => "z")
 
     end
-end
+  end
 
-end
+  feature "Delete User" do
+    scenario "Logged in user can delete other users" do
+      visit "/"
+      fill_in "username", with: "a"
+      fill_in "password", with: "a"
+      click_button "Sign In"
+      fill_in "username_to_delete", with: "z"
+      click_button "Delete User"
+      page.has_content?("z") == false
+
+    end
+  end

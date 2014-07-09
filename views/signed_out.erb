@@ -21,6 +21,12 @@
     <input class="button" type="submit" value="Alphabetize"/>
   </form>
 
+  <form method="post" style="width:250px" action="/delete">
+    <label for="username_to_delete">Username</label>
+    <input name="username_to_delete" id="username_to_delete" type="text">
+    <input class="button" type="submit" value="Delete User"/>
+  </form>
+
 <% end %>
 
 <% if session[:user] == nil %>
