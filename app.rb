@@ -25,6 +25,14 @@ class App < Sinatra::Application
   end
 
   post "/register" do
+    if (params[:username] || params[:password]) == ""
+      flash[:error] = "Please fill in all fields."
+      redirect "/register"
+    elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username]}'") != []
+      flash[:error] = "Username is already taken."
+      redirect "/register"
+    end
+
     @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}', '#{params[:password]}')")
     flash[:notice] = "Thanks for registering!"
     redirect "/"

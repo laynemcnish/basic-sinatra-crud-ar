@@ -24,10 +24,20 @@ feature "Login" do
   fill_in "username", with: "User"
   fill_in "password", with: "Password"
   click_button "Sign In"
-  page.has_content?("Welcome")
-  save_and_open_page
+  page.has_content?("Welcome, User")
+
 end
 
+feature "Logout" do
+  scenario "I can log out of homepage" do
+    visit "/"
+    fill_in "username", with: "User"
+    fill_in "password", with: "Password"
+    click_button "Sign In"
+    click_button "Log Out"
+    page.has_content?("Sign In")
+  end
+end
 
 
 end
