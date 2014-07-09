@@ -40,6 +40,15 @@ class App < Sinatra::Application
     redirect "/"
   end
 
+  get '/log_out' do
+
+  end
+
+  post '/log_out' do
+    session.delete(:user)
+    redirect "/"
+  end
+
   def find_user(username, password)
     @database_connection.sql("SELECT * FROM users WHERE username = '#{username}' AND password = '#{password}'")
   end

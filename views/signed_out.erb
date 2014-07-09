@@ -1,8 +1,11 @@
 
 <%unless session[:user] == nil%>
 
-  <h1>Welcome, </h1>
-  <a href="/sign_out">Sign Out</a>
+  <h1>Welcome, <%= session[:user]["username"] %></h1>
+  <form method="post" action="/log_out">
+    <input class="button" type="submit" value="Log Out"/>
+  </form>
+
 
   <% end %>
 
