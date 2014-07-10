@@ -10,7 +10,7 @@
     <% @users.each do |user| %>
       <% unless user == (session[:user]["username"]) %>
         <li>
-          <%= user %>
+         <a href="/see/<%=user%>"><%= user %></a>
         </li>
       <% end %>
 
@@ -41,9 +41,10 @@
     <input class="button" type="submit" value="Make Fish"/>
   </form>
 
+
   <ul>
     <% @fishlist.each do |fish| %>
-      <% if fish["user_id"] == (session[:user]["id"]) %>
+      <% if fish["user_id"] == session[:user]["id"] || (fish["user_id"] == (session[:fishuserid].flatten.first["id"]) if session[:fishuserid]) %>
         <li>
           <a href="<%= fish["fishwiki"]%>"><%= fish["fishname"] %></a>
         </li>

@@ -27,6 +27,11 @@ class App < Sinatra::Application
 
   end
 
+  get "/see/:fishuser" do
+    session[:fishuserid] = @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:fishuser]}'")
+    redirect "/"
+  end
+
   post "/register" do
     if (params[:username] || params[:password]) == ""
       flash[:error] = "Please fill in all fields."
@@ -58,6 +63,7 @@ class App < Sinatra::Application
   post '/log_out' do
     session.delete(:user)
     session.delete(:order)
+    session.delete(:fishuserid)
     redirect "/"
   end
 

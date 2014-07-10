@@ -57,10 +57,6 @@ feature "See Homepage" do
     click_button "Delete User"
     expect(page).to_not have_content("zeta")
 
-    fill_in "username_to_delete", with: "alpha"
-    click_button "Delete User"
-    expect(page).to_not have_content("alpha")
-
     #user can create a fish
     fill_in "fishname", with: "Goldfish"
     fill_in "fishwiki", with: "http://en.wikipedia.org/wiki/Goldfish"
@@ -72,6 +68,19 @@ feature "See Homepage" do
 
     click_button "Log Out"
     expect(page).to have_content("Sign In")
+
+    #scenario "I can see other users fish when I click on their names"
+
+    fill_in "username", with: "alpha"
+    fill_in "password", with: "alpha"
+    click_button "Sign In"
+    fill_in "fishname", with: "Trout"
+    fill_in "fishwiki", with: "http://en.wikipedia.org/wiki/Goldfish"
+    click_button "Make Fish"
+    click_link "blah"
+    expect(page).to have_link "Goldfish"
+    expect(page).to have_link "Trout"
+    expect(page).to have_content "Goldfish"
   end
 
   #database_cleaner
