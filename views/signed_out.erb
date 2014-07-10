@@ -38,9 +38,11 @@
 
   <ul>
     <% @fishlist.each do |fish| %>
+      <% if fish["user_id"] == (session[:user]["id"]) %>
         <li>
-          <a href="<%=fish[:fishwiki]%>"><%= fish[:fishname] %></a>
+          <a href="<%= fish["fishwiki"]%>"><%= fish["fishname"] %></a>
         </li>
+        <%end%>
     <% end %>
   </ul>
 <% end %>

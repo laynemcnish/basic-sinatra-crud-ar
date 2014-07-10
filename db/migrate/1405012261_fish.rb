@@ -3,6 +3,7 @@ class Fish < ActiveRecord::Migration
     create_table :fish do |t|
       t.string :fishname
       t.string :fishwiki
+      t.string :user_id
     end
   end
 

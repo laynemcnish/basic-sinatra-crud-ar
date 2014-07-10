@@ -72,7 +72,7 @@ class App < Sinatra::Application
   end
 
   post '/fish' do
-    @database_connection.sql("INSERT INTO fish (fishname, fishwiki) VALUES ('#{params[:fishname]}', '#{params[:fishwiki]}')")
+    @database_connection.sql("INSERT INTO fish (fishname, fishwiki, user_id) VALUES ('#{params[:fishname]}', '#{params[:fishwiki]}', '#{session[:user]["id"].to_i}')")
     redirect "/"
   end
 
@@ -85,7 +85,7 @@ class App < Sinatra::Application
   end
 
   def fish_getter
-    @database_connection.sql("SELECT fishname, fishwiki from fish")
+    @database_connection.sql("SELECT * from fish")
   end
 
   def database_cleaner

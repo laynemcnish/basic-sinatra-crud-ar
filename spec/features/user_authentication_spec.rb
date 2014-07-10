@@ -61,18 +61,13 @@ feature "See Homepage" do
     click_button "Delete User"
     expect(page).to_not have_content("alpha")
 
-    fill_in "username_to_delete", with: "blah"
-    click_button "Delete User"
-
-
     #user can create a fish
     fill_in "fishname", with: "Goldfish"
     fill_in "fishwiki", with: "http://en.wikipedia.org/wiki/Goldfish"
     click_button "Make Fish"
     save_and_open_page
-    click_link "Goldfish"
-    expect(page).to have_content("ornamental fish")
-
+    expect(page).to have_link("Goldfish", options={href:"http://en.wikipedia.org/wiki/Goldfish"})
+    expect(page).to_not have_link("Bass")
 
     #scenario "I can log out of homepage" do
 
