@@ -27,6 +27,22 @@
     <input class="button" type="submit" value="Delete User"/>
   </form>
 
+  <form method="post" style="width:250px" action="/fish">
+    <label for="fishname">Fish Name</label>
+    <input name="fishname" id="fishname" type="text">
+    <p></p>
+    <label for="fishwiki">Fish Wikipedia URL</label>
+    <input name="fishwiki" id="fishwiki" type="url">
+    <input class="button" type="submit" value="Make Fish"/>
+  </form>
+
+  <ul>
+    <% @fishlist.each do |fish| %>
+        <li>
+          <a href="<%=fish[:fishwiki]%>"><%= fish[:fishname] %></a>
+        </li>
+    <% end %>
+  </ul>
 <% end %>
 
 <% if session[:user] == nil %>

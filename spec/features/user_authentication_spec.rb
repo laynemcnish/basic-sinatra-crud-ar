@@ -5,67 +5,79 @@ feature "See Homepage" do
 
     #"An anonyous user can click registration button & see registration form"
     visit "/"
-    click_link "Register"
-    fill_in "username", with: "User"
-    fill_in "password", with: "Password"
+    click_link ('Register')
+    fill_in "username", with: "blah"
+    fill_in "password", with: "blah"
     click_button "Register"
-    page.has_content?('Thanks for registering!')
+    expect(page).to have_content('Thanks for registering!')
 
     #"If we don't fill in form, we get an error" do
     visit "/register"
     fill_in "username", with: ""
     fill_in "password", with: ""
-    page.has_content?('fill in')
+    click_button "Register"
+    expect(page).to have_content('Please fill in all fields.')
 
     #"If we try to register a name that's already taken, we get an error" do
     visit "/register"
-    fill_in "username", with: "User"
-    fill_in "password", with: "Password"
-    page.has_content?('taken')
+    fill_in "username", with: "blah"
+    fill_in "password", with: "blah"
+    click_button "Register"
+    expect(page).to have_content('Username is already taken.')
 
     #scenario "User can sort names" do
     visit "/"
     click_link "Register"
-    fill_in "username", with: "z"
-    fill_in "password", with: "z"
+    fill_in "username", with: "zeta"
+    fill_in "password", with: "zeta"
     click_button "Register"
-    visit "/register"
-    fill_in "username", with: "a"
-    fill_in "password", with: "a"
+
+    click_link "Register"
+    fill_in "username", with: "alpha"
+    fill_in "password", with: "alpha"
     click_button "Register"
     visit "/"
 
     #can login
-    fill_in "username", with: "User"
-    fill_in "password", with: "Password"
+    fill_in "username", with: "blah"
+    fill_in "password", with: "blah"
     click_button "Sign In"
 
     #sees logged-in homepage
-    page.has_content?("User", count: 1)
-    page.has_content?("Welcome, User")
-    page.has_content?("z")
+    expect(page).to have_content("blah", count: 1)
+    expect(page).to have_content("Welcome, blah")
+    expect(page).to have_content("zeta")
 
     #can alphabetize userlist
     click_button "Alphabetize"
-    page.should have_selector("ul li:nth-child(1)", :text => "a")
+    expect(page).to have_selector("ul li:nth-child(1)", :text => "alpha")
 
     #can delete users
-    fill_in "username_to_delete", with: "z"
+    fill_in "username_to_delete", with: "zeta"
     click_button "Delete User"
-    page.has_content?("z") == false
+    expect(page).to_not have_content("zeta")
 
-    fill_in "username_to_delete", with: "a"
+    fill_in "username_to_delete", with: "alpha"
     click_button "Delete User"
-    page.has_content?("a") == false
+    expect(page).to_not have_content("alpha")
 
-    fill_in "username_to_delete", with: "user"
+    fill_in "username_to_delete", with: "blah"
     click_button "Delete User"
-    page.has_content?("user") == false
+
+
+    #user can create a fish
+    fill_in "fishname", with: "Goldfish"
+    fill_in "fishwiki", with: "http://en.wikipedia.org/wiki/Goldfish"
+    click_button "Make Fish"
+    save_and_open_page
+    click_link "Goldfish"
+    expect(page).to have_content("ornamental fish")
+
 
     #scenario "I can log out of homepage" do
 
     click_button "Log Out"
-    page.has_content?("Sign In")
+    expect(page).to have_content("Sign In")
   end
 
   #database_cleaner

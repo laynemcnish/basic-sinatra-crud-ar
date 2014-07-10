@@ -15,7 +15,8 @@ class App < Sinatra::Application
   get "/" do
     @users = user_setter
     @users = @database_connection.sql("SELECT username from users ORDER BY username ASC").collect { |hash| hash["username"] } if session[:order]
-    erb :signed_out, :locals => {:users => @users}
+    @fishlist = fish_getter
+    erb :signed_out, :locals => {:users => @users, :fishlist => @fishlist}
   end
 
   get '/register' do
@@ -70,12 +71,21 @@ class App < Sinatra::Application
     redirect "/"
   end
 
+  post '/fish' do
+    @database_connection.sql("INSERT INTO fish (fishname, fishwiki) VALUES ('#{params[:fishname]}', '#{params[:fishwiki]}')")
+    redirect "/"
+  end
+
   def find_user(username, password)
     @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password.downcase}'")
   end
 
   def user_setter
     @database_connection.sql("SELECT username from users").collect { |hash| hash["username"] }
+  end
+
+  def fish_getter
+    @database_connection.sql("SELECT fishname, fishwiki from fish")
   end
 
   def database_cleaner
