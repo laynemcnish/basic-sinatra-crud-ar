@@ -78,4 +78,7 @@ class App < Sinatra::Application
     @database_connection.sql("SELECT username from users").collect { |hash| hash["username"] }
   end
 
+  def database_cleaner
+    @database_connection.sql("DELETE FROM users WHERE username = 'User'")
+  end
 end
