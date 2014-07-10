@@ -30,18 +30,18 @@ class App < Sinatra::Application
     if (params[:username] || params[:password]) == ""
       flash[:error] = "Please fill in all fields."
       redirect "/register"
-    elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username.downcase]}'") != []
+    elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username].downcase}'") != []
       flash[:error] = "Username is already taken."
       redirect "/register"
     end
 
-    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username].downcase}', '#{params[:password]}')")
+    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username].downcase}', '#{params[:password].downcase}')")
     flash[:notice] = "Thanks for registering!"
     redirect "/"
   end
 
   post '/sessions' do
-    user = find_user(params[:username].downcase, params[:password])[0]
+    user = find_user(params[:username], params[:password])[0]
     if user == nil
       flash[:notice] = "Login info incorrect!"
     else
@@ -60,18 +60,18 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-  def find_user(username, password)
-    @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password}'")
-  end
-
   post '/order' do
     session[:order] = true
     redirect "/"
   end
 
   post '/delete' do
-    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username_to_delete]}'")
+    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username_to_delete].downcase}'")
     redirect "/"
+  end
+
+  def find_user(username, password)
+    @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password.downcase}'")
   end
 
   def user_setter
