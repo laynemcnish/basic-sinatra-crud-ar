@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>User Authentication</title>
+  <title>Fish.ly</title>
   <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
@@ -21,9 +21,14 @@
     
   </ul>
 
-  <form method="post" action="/order">
-    <input class="button" type="submit" value="Alphabetize"/>
+  <form method="post" action="/order" id="alphabetize">
+    <select name="alphabetize" form="alphabetize">
+      <option value="ASC">From A to Z</option>
+      <option value="DESC">From Z to A</option>
+    </select>
+    <input class="button" type="submit" value="Order"/>
   </form>
+
 
   <form method="post" style="width:250px" action="/delete">
     <label for="username_to_delete">Username</label>

@@ -49,7 +49,7 @@ feature "See Homepage" do
     expect(page).to have_content("zeta")
 
     #can alphabetize userlist
-    click_button "Alphabetize"
+    click_button "Order"
     expect(page).to have_selector("ul li:nth-child(1)", :text => "alpha")
 
     #can delete users
@@ -65,7 +65,6 @@ feature "See Homepage" do
     fill_in "fishname", with: "Goldfish"
     fill_in "fishwiki", with: "http://en.wikipedia.org/wiki/Goldfish"
     click_button "Make Fish"
-    save_and_open_page
     expect(page).to have_link("Goldfish", options={href:"http://en.wikipedia.org/wiki/Goldfish"})
     expect(page).to_not have_link("Bass")
 

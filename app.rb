@@ -14,7 +14,7 @@ class App < Sinatra::Application
 
   get "/" do
     @users = user_setter
-    @users = @database_connection.sql("SELECT username from users ORDER BY username ASC").collect { |hash| hash["username"] } if session[:order]
+    @users = @database_connection.sql("SELECT username from users ORDER BY username #{session[:order]}").collect { |hash| hash["username"] } if session[:order]
     @fishlist = fish_getter
     erb :signed_out, :locals => {:users => @users, :fishlist => @fishlist}
   end
@@ -62,7 +62,7 @@ class App < Sinatra::Application
   end
 
   post '/order' do
-    session[:order] = true
+    session[:order] = params[:alphabetize]
     redirect "/"
   end
 
