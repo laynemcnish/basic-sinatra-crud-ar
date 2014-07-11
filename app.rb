@@ -28,7 +28,8 @@ class App < Sinatra::Application
   end
 
   get "/see/:fishuser" do
-    session[:fishuserid] = @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:fishuser]}'")
+    fishuser = @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:fishuser]}'")
+    session[:fishuserid] = (fishuser == [] ? nil : fishuser)
     redirect "/"
   end
 

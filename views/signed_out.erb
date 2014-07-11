@@ -1,21 +1,21 @@
 <% unless session[:user] == nil %>
 
-  <h1>Welcome, <%= session[:user]["username"] %></h1>
-  <form method="post" action="/log_out">
-    <input class="button" type="submit" value="Log Out"/>
-  </form>
+  <h1>Welcome, <%= session[:user]["username"] %>!</h1>
 
-  <h1>Other Users:</h1>
+
+  <h2>Other Users:</h2>
   <ul>
     <% @users.each do |user| %>
       <% unless user == (session[:user]["username"]) %>
         <li>
-         <a href="/see/<%=user%>"><%= user %></a>
+          <a href="/see/<%= user %>"><%= user %></a>
         </li>
       <% end %>
-
     <% end %>
   </ul>
+
+  <p></p>
+
 
   <form method="post" action="/order" id="alphabetize">
     <select name="alphabetize" form="alphabetize">
@@ -25,33 +25,52 @@
     <input class="button" type="submit" value="Order"/>
   </form>
 
+  <p></p>
 
-  <form method="post" style="width:250px" action="/delete">
+  <form method="post" action="/delete">
     <label for="username_to_delete">Username</label>
     <input name="username_to_delete" id="username_to_delete" type="text">
     <input class="button" type="submit" value="Delete User"/>
   </form>
 
-  <form method="post" style="width:250px" action="/fish">
-    <label for="fishname">Fish Name</label>
-    <input name="fishname" id="fishname" type="text">
-    <p></p>
-    <label for="fishwiki">Fish Wikipedia URL</label>
-    <input name="fishwiki" id="fishwiki" type="url">
-    <input class="button" type="submit" value="Make Fish"/>
-  </form>
+  <p></p>
 
+  <h2>Fish List:</h2>
 
   <ul>
     <% @fishlist.each do |fish| %>
       <% if fish["user_id"] == session[:user]["id"] || (fish["user_id"] == (session[:fishuserid].flatten.first["id"]) if session[:fishuserid]) %>
         <li>
           <a href="<%= fish["fishwiki"]%>" target="_blank"><%= fish["fishname"] %></a>
+
         </li>
-        <%end%>
+      <% end %>
     <% end %>
   </ul>
+
+
+
+<p></p>
+
+  <form method="post" action="/fish">
+    <label for="fishname">Fish Name</label>
+    <input name="fishname" id="fishname" type="text">
+
+    <p></p>
+    <label for="fishwiki">Fish Wikipedia URL</label>
+    <input name="fishwiki" id="fishwiki" type="url">
+    <input class="button" type="submit" value="Make Fish"/>
+  </form>
+
+  <p></p>
+
+<form method="post" action="/log_out">
+  <input class="button" type="submit" value="Log Out"/>
+</form>
+
 <% end %>
+
+
 
 <% if session[:user] == nil %>
 
@@ -60,12 +79,12 @@
   <% end %>
 
   <a href="/register">
-    <button class="button">Register</button>
+    <div class="button">Register</div>
   </a>
 
   <h2>Sign In</h2>
 
-  <form method="post" style="width:250px" action="/sessions">
+  <form method="post" action="/sessions">
     <table>
       <tbody>
       <tr>
