@@ -46,7 +46,7 @@
     <% @fishlist.each do |fish| %>
       <% if fish["user_id"] == session[:user]["id"] || (fish["user_id"] == (session[:fishuserid].flatten.first["id"]) if session[:fishuserid]) %>
         <li>
-          <a href="<%= fish["fishwiki"]%>"><%= fish["fishname"] %></a>
+          <a href="<%= fish["fishwiki"]%>" target="_blank"><%= fish["fishname"] %></a>
         </li>
         <%end%>
     <% end %>
