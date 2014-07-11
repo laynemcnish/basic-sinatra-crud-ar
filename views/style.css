@@ -1,5 +1,9 @@
-table {
+.wrapper {
+    width: 300px;
+    margin: auto;
+}
 
+table {
     font-family: serif;
     width: 250px;
 }
