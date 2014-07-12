@@ -5,7 +5,7 @@ feature "See Homepage" do
 
     #"An anonyous user can click registration button & see registration form"
     visit "/"
-    click_link ('Register')
+    click_button ("Register")
     fill_in "username", with: "blah"
     fill_in "password", with: "blah"
     click_button "Register"
@@ -27,12 +27,12 @@ feature "See Homepage" do
 
     #scenario "User can sort names" do
     visit "/"
-    click_link "Register"
+    click_button "Register"
     fill_in "username", with: "zeta"
     fill_in "password", with: "zeta"
     click_button "Register"
 
-    click_link "Register"
+    click_button "Register"
     fill_in "username", with: "alpha"
     fill_in "password", with: "alpha"
     click_button "Register"
@@ -44,11 +44,12 @@ feature "See Homepage" do
     click_button "Sign In"
 
     #sees logged-in homepage
-    expect(page).to have_content("blah", count: 1)
+    # expect(page).to have_content("blah", count: 1)
     expect(page).to have_content("Welcome, blah")
     expect(page).to have_content("zeta")
 
     #can alphabetize userlist
+    save_and_open_page
     click_button "Order"
     expect(page).to have_selector("ul li:nth-child(1)", :text => "alpha")
 

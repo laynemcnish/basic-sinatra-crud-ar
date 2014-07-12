@@ -1,0 +1,127 @@
+/* ----- =structure ----- */
+
+body {
+    background-color: #bad1ff;
+    font-family: helvetica, sans-serif;
+
+}
+
+header {
+    background-color: #4eb6bd; /* Light Blue*/
+    width: 100%;
+    min-width: 1100px;
+    font-family: helvetica, sans-serif;
+}
+
+header img {
+    width: 325px;
+    height: 120px;
+}
+
+nav {
+    background-color: #4eb6bd; /* Light Blue */
+    height: 30px;
+}
+
+#content {
+    background-color: #fff; /* White */
+}
+
+footer {
+    background-color: #c5c5c5; /* Dark Grey */
+}
+
+.wrapper {
+    margin: auto;
+    width: 980px;
+
+}
+
+.left {
+    float: left;
+}
+
+/* ----- =columns ----- */
+
+.one_half {
+    width: 460px;
+}
+
+.one_third {
+    width: 300px;
+}
+
+.two_third {
+    width: 620px;
+}
+
+.one_fourth {
+    width: 220px;
+}
+
+.three_fourth {
+    width: 700px;
+}
+
+.full_column {
+    width: 940px;
+}
+
+article {
+    position: relative;
+    margin-left: 20px;
+
+    float: left;
+}
+
+img {
+    width: 100%;
+}
+
+/* clearfix */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/* * For IE 6/7 only * Include this rule to trigger hasLayout and contain floats. */
+.clearfix {
+    *zoom: 1;
+}
+
+/* DEMO STYLE - Box Outlines  */
+
+article {
+    box-sizing: border-box;
+}
+
+section {
+    box-sizing: border-box;
+    padding: 0px 0 0px 0;
+}
+
+.fa-stack {
+    margin-left: 50px;
+}
+
+.button {
+    line-height: 1;
+    text-decoration:none;
+    display: inline-block;
+    font-family: Helvetica, sans-serif;
+    text-transform:uppercase;
+    font-size:22px;
+    letter-spacing:1px;
+    color:#4eb6bd;
+    cursor:pointer;
+
+}
+
+.grey {
+
+}

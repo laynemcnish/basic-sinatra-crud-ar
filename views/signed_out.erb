@@ -1,104 +1,139 @@
+<!--IF LOGGED IN -->
+
 <% unless session[:user] == nil %>
 
-  <h1>Welcome, <%= session[:user]["username"] %>!</h1>
+  <!--SECTION 1: FISH LIST-->
+
+  <section class="clearfix">
+    <article class="one_third">
+      <h2>Fish List:</h2>
+
+      <ul>
+        <% @fishlist.each do |fish| %>
+          <% if fish["user_id"] == session[:user]["id"]  %>
+            <li>
+              <a href="<%= fish["fishwiki"] %>" target="_blank"><%= fish["fishname"] %></a>
+
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+
+      <h2>Add a new fish!</h2>
+
+      <form method="post" action="/fish">
+        <label for="fishname">Fish Name</label>
+        <input name="fishname" id="fishname" type="text">
+
+        <p></p>
+        <label for="fishwiki">Fish Wikipedia URL</label>
+        <input name="fishwiki" id="fishwiki" type="url">
+        <input class="button" type="submit" value="Make Fish"/>
+      </form>
 
 
-  <h2>Other Users:</h2>
-  <ul>
-    <% @users.each do |user| %>
-      <% unless user == (session[:user]["username"]) %>
-        <li>
-          <a href="/see/<%= user %>"><%= user %></a>
-        </li>
+    </article>
+
+
+    <!--END OF FISH LIST SECTION-->
+
+
+    <!--SECTION 2: FISH INFO-->
+    <article class="one_third">
+      <h2>Fish Info</h2>
+    </article>
+    <!--END of FISH INFO SECTION-->
+
+
+    <!--SECTION 3: USER LIST-->
+
+    <article class="one_third">
+      <h2>Other Users:</h2>
+      <ul>
+        <% @users.each do |user| %>
+          <% unless user == (session[:user]["username"]) %>
+            <li>
+              <a href="/see/<%= user %>"><%= user %></a>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+
+      <p></p>
+
+
+      <form method="post" action="/order" id="alphabetize">
+        <select name="alphabetize" form="alphabetize">
+          <option value="ASC">From A to Z</option>
+          <option value="DESC">From Z to A</option>
+        </select>
+        <input class="button" type="submit" value="Order"/>
+      </form>
+
+      <p></p>
+
+      <form method="post" action="/delete">
+        <label for="username_to_delete">Username</label>
+        <input name="username_to_delete" id="username_to_delete" type="text">
+        <input class="button" type="submit" value="Delete User"/>
+      </form>
+
+      <p></p>
+
+      <% unless session[:fishuserid] == nil %>
+        <h2><%= session[:fishuserid].flatten.first["username"] %>'s Fish:</h2>
+        <ul>
+          <% @fishlist.each do |fish| %>
+            <% if fish["user_id"] == session[:fishuserid].flatten.first["id"] %>
+              <li>
+                <a href="<%= fish["fishwiki"] %>" target="_blank"><%= fish["fishname"] %></a>
+                <!--<form method="post" class="favorite" action="/favorite/<%= fish["id"] %>">-->
+                  <!--<input class="favorite_button" type="submit" value="♥" id="favorite <%= fish["fishname"] %>"/>-->
+                <!--</form>-->
+              </li>
+            <% end %>
+          <% end %>
       <% end %>
-    <% end %>
-  </ul>
+      </ul>
 
-  <p></p>
-
-
-  <form method="post" action="/order" id="alphabetize">
-    <select name="alphabetize" form="alphabetize">
-      <option value="ASC">From A to Z</option>
-      <option value="DESC">From Z to A</option>
-    </select>
-    <input class="button" type="submit" value="Order"/>
-  </form>
-
-  <p></p>
-
-  <form method="post" action="/delete">
-    <label for="username_to_delete">Username</label>
-    <input name="username_to_delete" id="username_to_delete" type="text">
-    <input class="button" type="submit" value="Delete User"/>
-  </form>
-
-  <p></p>
-
-  <h2>Fish List:</h2>
-
-  <ul>
-    <% @fishlist.each do |fish| %>
-      <% if fish["user_id"] == session[:user]["id"] || (fish["user_id"] == (session[:fishuserid].flatten.first["id"]) if session[:fishuserid]) %>
-        <li>
-          <a href="<%= fish["fishwiki"]%>" target="_blank"><%= fish["fishname"] %></a>
-
-        </li>
-      <% end %>
-    <% end %>
-  </ul>
-
-
-
-<p></p>
-
-  <form method="post" action="/fish">
-    <label for="fishname">Fish Name</label>
-    <input name="fishname" id="fishname" type="text">
-
-    <p></p>
-    <label for="fishwiki">Fish Wikipedia URL</label>
-    <input name="fishwiki" id="fishwiki" type="url">
-    <input class="button" type="submit" value="Make Fish"/>
-  </form>
-
-  <p></p>
-
-<form method="post" action="/log_out">
-  <input class="button" type="submit" value="Log Out"/>
-</form>
+    </article>
+  </section>
 
 <% end %>
 
-
+<!--IF NOT LOGGED IN-->
 
 <% if session[:user] == nil %>
+  <section class="clearfix">
+    <article class="one_third"><p></p></article>
+    <article class="one_third">
+      <% if flash[:notice] %>
+        <p class="flash"><%= flash[:notice] %></p>
+      <% end %>
 
-  <% if flash[:notice] %>
-    <p class="flash"><%= flash[:notice] %></p>
-  <% end %>
+      <h2>Sign In</h2>
 
-  <a href="/register">
-    <div class="button">Register</div>
-  </a>
+      <form method="post" action="/sessions">
+        <table>
+          <tbody>
+          <tr>
+            <td><label for="username">Username</label></td>
+            <td><input name="username" id="username" type="text"></td>
+          </tr>
+          <tr>
+            <td><label for="password">Password</label></td>
+            <td><input name="password" id="password" type="password"></td>
+          </tr>
+          </tbody>
+        </table>
+        <input class="button" type="submit" value="Sign In"/>
+      </form>
+      <h3>Don't have a username yet?</h3>
 
-  <h2>Sign In</h2>
-
-  <form method="post" action="/sessions">
-    <table>
-      <tbody>
-      <tr>
-        <td><label for="username">Username</label></td>
-        <td><input name="username" id="username" type="text"></td>
-      </tr>
-      <tr>
-        <td><label for="password">Password</label></td>
-        <td><input name="password" id="password" type="password"></td>
-      </tr>
-      </tbody>
-    </table>
-    <input class="button" type="submit" value="Sign In"/>
-
-  </form>
-
+      <form method="get" action="/register">
+        <input class="button" type="submit" value="Register"/>
+      </form>
+    </article>
+    <article class="one_third"><p></p></article>
+  </section>
 <% end %>

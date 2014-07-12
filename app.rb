@@ -87,6 +87,7 @@ class App < Sinatra::Application
     @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password.downcase}'")
   end
 
+
   def user_setter
     @database_connection.sql("SELECT username from users").collect { |hash| hash["username"] }
   end
