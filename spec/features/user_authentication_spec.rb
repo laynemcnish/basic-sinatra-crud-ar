@@ -49,7 +49,6 @@ feature "See Homepage" do
     expect(page).to have_content("zeta")
 
     #can alphabetize userlist
-    save_and_open_page
     click_button "Order"
     expect(page).to have_selector("ul li:nth-child(1)", :text => "alpha")
 
