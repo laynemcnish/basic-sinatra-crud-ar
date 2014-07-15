@@ -1,7 +1,7 @@
 require "sinatra"
 require "active_record"
 require "rack-flash"
-require "./lib/database_connection"
+require "gschool_database_connection"
 
 class App < Sinatra::Application
   enable :sessions
@@ -10,53 +10,48 @@ class App < Sinatra::Application
 
   def initialize
     super
-    @database_connection = DatabaseConnection.establish(ENV["RACK_ENV"])
+    @database_connection = GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
   end
 
   get "/" do
-    erb :root
+    @users = user_setter
+    @users = @database_connection.sql("SELECT username FROM users ORDER BY username #{session[:order]}").collect {|hash| hash["username"]} if session[:order]
+    erb :root, :locals => {:users => @users}
   end
 
   get "/register" do
     erb :register
   end
 
-  get "/login" do
-    @user = @database_connection.sql("select username from users where id = #{session[:user_id]}").first
-    erb :login, :locals => {:user => @user}
 
-  end
+  post "/sessions" do
 
-  get "/logout" do
-    redirect "/"
-  end
+    user = find_user(params[:username], params[:password])[0]
 
+    if user != nil
+      session[:user] = user
+      redirect "/"
 
-  # if (params[:username] || params[:password]) == ""
-  # flash[:error] = "Please fill in all fields."
-  # redirect "/"
-  # end
-
-
-  post "/login" do
-
-    if params[:username] == "" && params[:password] == ""
-    flash[:error] = "Username and password required."
-    redirect "/"
+    elsif params[:username] == "" && params[:password] == ""
+      flash[:error] = "Username and password required."
+      redirect "/"
 
     elsif params[:username] == ""
-    flash[:error] = "Username required."
-    redirect "/"
+      flash[:error] = "Username required."
+      redirect "/"
 
     elsif params[:password] == ""
-    flash[:error] = "Password required."
-    redirect "/"
+      flash[:error] = "Password required."
+      redirect "/"
+
+    elsif user == nil
+      flash[:error] = "Login Info is incorrect"
+      redirect "/"
 
     end
-
     user = @database_connection.sql("select * from users where username = '#{params[:username]}' and password = '#{params[:password]}'").first
-    session[:user_id] = user["id"]
-    redirect "/login"
+    session[:user] = user
+    redirect "/"
 
 
   end
@@ -69,6 +64,7 @@ class App < Sinatra::Application
     elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username].downcase}'") != []
       flash[:error] = "Username is already taken."
       redirect "/register"
+
     end
 
 
@@ -77,13 +73,30 @@ class App < Sinatra::Application
     redirect "/"
   end
 
+  post "/logout" do
+    session.delete(:user)
+    redirect "/"
+  end
+
+  post "/order" do
+    session[:order] = params[:alphabetize]
+    redirect "/"
+  end
+
+  post "/delete" do
+    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username_to_delete]}'")
+    redirect "/"
+  end
 
   private
 
-  def find_user(params)
-    @database_connection.all.select { |x| x[:username] == params[:username] && x[:password] == params[:password] }[0]
+  def find_user(username, password)
+    @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password.downcase}'")
   end
 
+  def user_setter
+    @database_connection.sql("SELECT username FROM users").collect { |hash| hash["username"] }
+  end
 
 
 end

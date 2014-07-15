@@ -1,3 +1,48 @@
+<!--LOGGED IN-->
+
+<% unless session[:user] == nil %>
+<h1>The Login Page</h1>
+
+<h1>Welcome, <%= session[:user]["username"] %>!</h1>
+
+<form action="/logout" method="post">
+
+  <input type="submit" class="button" value="logout" />
+
+</form>
+
+<!-- List of users -->
+<h2>Other Users:</h2>
+  <% @users.each do |user| %>
+    <% unless user == (session[:user]["username"]) %>
+      <li><%= user %></li>
+    <% end %>
+  <% end %>
+
+  <form method="post" action="/order" id="alphabetize">
+    <select name="alphabetize" form="alphabetize">
+      <option value="ASC">From A - Z</option>
+      <option value="DESC">From Z - A</option>
+    </select>
+    <input class="button" type="submit" value="Order" />
+  </form>
+
+  <form method="post" action="/delete" >
+    <label for="username_to_delete">Username:</label>
+    <input name="username_to_delete" id="username_to_delete" type="text">
+    <input class="button" type="submit" value="Delete User" />
+  </form>
+
+<% end %>
+
+
+
+
+
+<!--LOGGED OUT-->
+
+<% if session[:user] == nil %>
+
 <% if flash[:notice] %>
   <div id="message"><%= flash[:notice] %></div>
   <% end %>
@@ -18,7 +63,7 @@
 <% end %>
 
 
-<form action="/login" method="post">
+<form action="/sessions" method="post">
 
   <div>
     <label for="username">Username: </label>
@@ -27,7 +72,7 @@
 
   <div>
     <label for="password">Password: </label>
-    <input type="text" id="password" name="password"
+    <input type="password" id="password" name="password">
   </div>
 
   <p></p>
@@ -37,3 +82,4 @@
 </form>
 
 
+<% end %>
