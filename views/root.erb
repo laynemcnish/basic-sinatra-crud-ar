@@ -46,7 +46,24 @@
 
 
   <!--ADDING FISH-->
+  <table border="1" style="width:300px">
+    <tr>
+      <td><%= "Name" %></td>
+      <td><%= "Actions" %></td>
+    </tr>
 
+
+    <% @fish.each do |fish| %>
+      <% if fish[:user_id] == session[:user]["id"] %>
+        <tr>
+          <td><%= fish %></td>
+          <td><a href="/wikipedia/<%= fish %>">Wikipedia</a></td>
+        </tr>
+      <% end %>
+    <% end %>
+
+
+  </table>
 
 
   <h2>Fishies:</h2>

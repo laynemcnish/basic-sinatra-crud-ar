@@ -97,6 +97,10 @@ class App < Sinatra::Application
     redirect "/"
   end
 
+  get "/wikipedia/:fish_name" do
+    @database_connection.sql("SELECT wikipage FROM fish WHERE fish_name = '#{params[:fish_name]}'")
+  end
+
   private
 
   def find_user(username, password)
