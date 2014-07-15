@@ -54,16 +54,29 @@ feature "able to delete a user" do
   end
 end
 
+feature "able to create a fish" do
+  scenario "user should be able to enter a fish name and wikipage" do
+    i_am_registered
+    i_am_logged_in
+    fill_in('fish_name', :with => 'blowfish')
+    fill_in('wikipage', :with=> 'http://en.wikipedia.org/wiki/Blowfish_(cipher)')
+    click_button 'Add Fish'
+    expect(page).to have_content('blowfish')
+  end
+end
+
 def i_am_registered
   visit "/register"
   fill_in('username', :with => 'user1')
   fill_in('password', :with => 'password')
   click_button 'Register'
-  visit "/register"
+
+  click_button 'Register'
   fill_in('username', :with => 'zeta')
   fill_in('password', :with => 'password')
   click_button 'Register'
-  visit "/register"
+
+  click_button 'Register'
   fill_in('username', :with => 'beta')
   fill_in('password', :with => 'password')
   click_button 'Register'
@@ -76,4 +89,6 @@ def i_am_logged_in
   fill_in('password', :with => 'password')
   click_button 'Login'
 end
+
+
 

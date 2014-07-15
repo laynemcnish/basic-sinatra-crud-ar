@@ -17,8 +17,9 @@ class App < Sinatra::Application
 
   get "/" do
     @users = user_setter
+    @fish = fish_setter
     @users = @database_connection.sql("SELECT username FROM users ORDER BY username #{session[:order]}").collect {|hash| hash["username"]} if session[:order]
-    erb :root, :locals => {:users => @users}
+    erb :root, :locals => {:users => @users, :fish => @fish}
   end
 
   get "/register" do
@@ -64,11 +65,10 @@ class App < Sinatra::Application
       flash[:error] = "Please fill in all fields."
       redirect "/register"
     elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username].downcase}'") != []
-      flash[:error] = "Username is already taken."
+      flash[:error] = " Username is already taken."
       redirect "/register"
 
     end
-
 
     flash[:notice] = "Thank you for registering"
     @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}','#{params[:password]}')")
@@ -90,6 +90,11 @@ class App < Sinatra::Application
     redirect "/"
   end
 
+  post "/add_fish" do
+    @database_connection.sql("INSERT INTO fish (fish_name, wikipage, user_id) VALUES ('#{params[:fish_name]}','#{params[:wikipage]}', '#{session[:user]["id"].to_i}')")
+    redirect "/"
+  end
+
   private
 
   def find_user(username, password)
@@ -100,5 +105,8 @@ class App < Sinatra::Application
     @database_connection.sql("SELECT username FROM users").collect { |hash| hash["username"] }
   end
 
+  def fish_setter
+    @database_connection.sql("SELECT * FROM fish")
+  end
 
 end

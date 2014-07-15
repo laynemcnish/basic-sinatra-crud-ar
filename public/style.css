@@ -3,11 +3,6 @@
     margin: auto;
 }
 
-div {
-    width: 300px;
-    text-align: center;
-}
-
 button {
     margin: auto;
     width: 300px;
@@ -15,16 +10,39 @@ button {
     font-size: 20px;
 }
 
-input {
-    width: 300px;
-}
-
-
 a {
     text-decoration: none;
-    color: black;
+    color: blue;
 }
 
 h3 {
     text-align: center;
+}
+
+.error {
+    color: red;
+}
+
+.container {
+    width: 300px;
+    clear: both;
+    outline:#000000 solid;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+
+.form-element label {
+    display: inline-block;
+    width: 90px;
+}
+
+.form-element input {
+    display: inline-block;
+    width: 200px;
+}
+
+.button {
+    width: 300px;
 }

@@ -1,27 +1,30 @@
-<h1>Register</h1>
+<h1>Register for fish.ly!</h1>
 
-<form action="/register" method="post">
+<div class="container">
+  <form action="/register" method="post" style="display: inline;">
 
-  <h1>Select a username and password:</h1>
+    <h1>Information</h1>
 
 
-  <% if flash[:error] %>
-    <p class="flash"><%= flash[:error] %></p>
-  <% end %>
+    <% if flash[:error] %>
+      <p class="error"><%= flash[:error] %></p>
+    <% end %>
 
-  <div>
+    <div class="form-element">
     <label for="username">Username:</label>
     <input type="text" id="username" name="username"/>
-  </div>
+    </div>
 
-  <div>
+    <div class="form-element">
     <label for="password">Password: </label>
     <input type="password" id="password" name="password"/>
-  </div>
-
-  <p></p>
-
-  <input type="submit" class="button" value="Register me!" />
+    </div>
 
 
-</form>
+    <p></p>
+
+    <input type="submit" class="button" value="Register"/>
+
+
+  </form>
+</div>
