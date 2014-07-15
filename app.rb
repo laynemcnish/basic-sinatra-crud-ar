@@ -18,6 +18,7 @@ class App < Sinatra::Application
   get "/" do
     @users = user_setter
     @fish = fish_setter
+
     @users = @database_connection.sql("SELECT username FROM users ORDER BY username #{session[:order]}").collect {|hash| hash["username"]} if session[:order]
     erb :root, :locals => {:users => @users, :fish => @fish}
   end
@@ -85,8 +86,9 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-  post "/delete" do
-    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username_to_delete]}'")
+
+  get "/delete/:username" do
+    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username]}'")
     redirect "/"
   end
 
@@ -107,6 +109,10 @@ class App < Sinatra::Application
 
   def fish_setter
     @database_connection.sql("SELECT * FROM fish")
+  end
+
+  def delete_user
+    @database_connection.sql("DELETE FROM users WHERE username = '#{}'")
   end
 
 end
