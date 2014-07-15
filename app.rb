@@ -10,8 +10,10 @@ class App < Sinatra::Application
 
   def initialize
     super
+
     @database_connection = GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
   end
+
 
   get "/" do
     @users = user_setter
