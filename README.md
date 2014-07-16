@@ -32,3 +32,5 @@ Follow the mockups and stories to get started. The mockups only go through to us
 1. Finish and deliver story
 1. Check heroku and bask in the glory of real software
 1. Rinse and Repeat
+
+To view fish.ly, go to http://damp-ravine-8078.herokuapp.com/

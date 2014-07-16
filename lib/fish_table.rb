@@ -14,7 +14,7 @@ class FishTable
 
   def find_fish(user_id)
     find_fish = <<-SQL
-    select * from fish where user_id=#{user_id}
+    select * from fish where user_id=(#{user_id})
     SQL
     @database_connection.sql(find_fish)
   end

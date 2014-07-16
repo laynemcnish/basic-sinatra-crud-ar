@@ -66,7 +66,6 @@ class App < Sinatra::Application
     session[:user]
     redirect "/"
 
-
   end
 
   post "/register" do
