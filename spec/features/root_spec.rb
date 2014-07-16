@@ -4,7 +4,7 @@ feature "homepage" do
   scenario "should have a registration button" do
     visit "/"
 
-    expect(page).to have_link("Register")
+    expect(page).to have_button("Register")
   end
 end
 
@@ -47,8 +47,7 @@ feature "able to delete a user" do
   scenario "should be able to enter username and click delete" do
     i_am_registered
     i_am_logged_in
-    fill_in('username_to_delete', :with => 'zeta')
-    click_button 'Delete User'
+    click_link('Delete')
     expect(page).to_not have_content('zeta')
 
   end
@@ -62,6 +61,7 @@ feature "able to create a fish" do
     fill_in('wikipage', :with=> 'http://en.wikipedia.org/wiki/Blowfish_(cipher)')
     click_button 'Add Fish'
     expect(page).to have_content('blowfish')
+    save_and_open_page
   end
 end
 
@@ -89,6 +89,3 @@ def i_am_logged_in
   fill_in('password', :with => 'password')
   click_button 'Login'
 end
-
-
-
