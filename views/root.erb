@@ -23,17 +23,18 @@
     </tr>
 
 
-  <% @users.each do |user| %>
-    <% unless user == (session[:user]["username"]) %>
-      <tr>
-        <td><%= user %></td>
-        <td><a href="/delete/<%= user %>">Delete</a></td>
+    <% @users.each do |user| %>
+      <% unless user == (session[:user]["username"]) %>
+        <tr>
+          <td><%= user %></td>
+          <td><a href="/delete/<%= user %>">Delete</a></td>
         </tr>
+      <% end %>
     <% end %>
-  <% end %>
 
 
   </table>
+  <p></p>
 
   <form method="post" action="/order" id="alphabetize">
     <select name="alphabetize" form="alphabetize">
@@ -46,6 +47,15 @@
 
 
   <!--ADDING FISH-->
+
+
+
+  <h2>Fishies:</h2>
+  <!-- add table with two columns and separate wikipedia link from names -->
+
+
+
+
   <table border="1" style="width:300px">
     <tr>
       <td><%= "Name" %></td>
@@ -54,42 +64,29 @@
 
 
     <% @fish.each do |fish| %>
-      <% if fish[:user_id] == session[:user]["id"] %>
+      <% if fish["user_id"] == session[:user]["id"] %>
         <tr>
-          <td><%= fish %></td>
-          <td><a href="/wikipedia/<%= fish %>">Wikipedia</a></td>
+          <td><%= fish["fish_name"] %></td>
+          <td><a href="/wikipedia/<%= fish["wikipage"] %>">Wikipedia</a></td>
         </tr>
       <% end %>
     <% end %>
-
-
   </table>
+<p></p>
+  <form action="/add_fish" method="post" style="display: inline;">
 
+    <div class="form-element">
+      <label for="fish_name">Fish name:</label>
+      <input type="text" id="fish_name" name="fish_name" required/>
+    </div>
 
-  <h2>Fishies:</h2>
-  <!-- add table with two columns and separate wikipedia link from names -->
-<ul>
-  <% @fish.each do |fish| %>
-
-    <% if fish[:user_id] == session[:user]["id"] %>
-
-      <a href="<%= fish["wikipage"] %>">
-        <li><%= fish["fish_name"] %></li>
-      </a>
-
-    <% end %>
-  <% end %>
-  </ul>
-
-  <form method="post" action="/add_fish" id="add_fish">
-
-    <label for="fish_name">Fish name:</label>
-    <input type="text" id="fish_name" name="fish_name"/>
-
-    <label for="wikipage">Wikipage: </label>
-    <input type="url" id="wikipage" name="wikipage"/>
-
+    <div class="form-element">
+      <label for="wikipage">Wikipage: </label>
+      <input type="url" id="wikipage" name="wikipage" required/>
+    </div>
+    <p></p>
     <input type="submit" class="button" value="Add Fish"/>
+
 
   </form>
 

@@ -93,7 +93,7 @@ class App < Sinatra::Application
   end
 
   post "/add_fish" do
-    @database_connection.sql("INSERT INTO fish (fish_name, wikipage, user_id) VALUES ('#{params[:fish_name]}','#{params[:wikipage]}', '#{session[:user]["id"].to_i}')")
+    @database_connection.sql("INSERT INTO fish (fish_name, wikipage, user_id) VALUES ('#{params["fish_name"]}','#{params["wikipage"]}', '#{session[:user]["id"].to_i}')")
     redirect "/"
   end
 
