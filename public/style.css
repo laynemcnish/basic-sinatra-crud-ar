@@ -1,4 +1,5 @@
 .wrapper {
+<<<<<<< HEAD
     width: 460px;
     margin: auto;
     background-color: white;
@@ -65,4 +66,64 @@ form {
     border-bottom: solid 2px silver;
 }
 
+=======
+    width: 300px;
+    margin: auto;
+}
+
+
+a {
+    text-decoration: none;
+    color: blue;
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+.error {
+    color: red;
+}
+
+.notice {
+    color: green;
+}
+
+.container {
+    width: 300px;
+    clear: both;
+    outline:#000000 solid;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+
+.form-element label {
+    display: inline-block;
+    width: 90px;
+}
+
+.form-element input {
+    display: inline-block;
+    width: 200px;
+}
+
+
+
+.button {
+    width: 300px;
+    font-size: 20px;
+}
+
+.button_big {
+    height: 100px;
+    width: 300px;
+    font-size: 20px;
+}
+>>>>>>> 0f2cef6ef358d171a5f2f211f98c0fb6cd232adf
 

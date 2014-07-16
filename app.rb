@@ -1,4 +1,5 @@
 require "sinatra"
+require "active_record"
 require "rack-flash"
 require "gschool_database_connection"
 
@@ -6,96 +7,116 @@ class App < Sinatra::Application
   enable :sessions
   use Rack::Flash
 
+
   def initialize
     super
+
     @database_connection = GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
   end
 
+
   get "/" do
     @users = user_setter
-    @users = @database_connection.sql("SELECT username from users ORDER BY username #{session[:order]}").collect { |hash| hash["username"] } if session[:order]
-    @fishlist = fish_getter
-    erb :signed_out, :locals => {:users => @users, :fishlist => @fishlist}
+    @fish = fish_setter
+
+    @users = @database_connection.sql("SELECT username FROM users ORDER BY username #{session[:order]}").collect { |hash| hash["username"] } if session[:order]
+    erb :root, :locals => {:users => @users, :fish => @fish}
   end
 
-  get '/register' do
-    erb :registrations
+  get "/register" do
+    erb :register
   end
 
-  get "/sessions" do
 
-  end
+  post "/sessions" do
 
-  get "/see/:fishuser" do
-    fishuser = @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:fishuser]}'")
-    session[:fishuserid] = (fishuser == [] ? nil : fishuser)
+    user = find_user(params[:username], params[:password])[0]
+
+    if user != nil
+      session[:user] = user
+      redirect "/"
+
+    elsif params[:username] == "" && params[:password] == ""
+      flash[:error] = "Username and password required."
+      redirect "/"
+
+    elsif params[:username] == ""
+      flash[:error] = "Username required."
+      redirect "/"
+
+    elsif params[:password] == ""
+      flash[:error] = "Password required."
+      redirect "/"
+
+    elsif user == nil
+      flash[:error] = "Login Info is incorrect"
+      redirect "/"
+
+    end
+    user = @database_connection.sql("select * from users where username = '#{params[:username]}' and password = '#{params[:password]}'").first
+    session[:user] = user
     redirect "/"
+
+
   end
 
   post "/register" do
+
     if (params[:username] || params[:password]) == ""
       flash[:error] = "Please fill in all fields."
       redirect "/register"
     elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username].downcase}'") != []
-      flash[:error] = "Username is already taken."
+      flash[:error] = " Username is already taken."
       redirect "/register"
+
     end
 
-    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username].downcase}', '#{params[:password].downcase}')")
-    flash[:notice] = "Thanks for registering!"
+    flash[:notice] = "Thank you for registering"
+    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}','#{params[:password]}')")
     redirect "/"
   end
 
-  post '/sessions' do
-    user = find_user(params[:username], params[:password])[0]
-    if user == nil
-      flash[:notice] = "Login info incorrect!"
-    else
-      session[:user] = user
-    end
-    redirect "/"
-  end
-
-  get '/log_out' do
-
-  end
-
-  post '/log_out' do
+  post "/logout" do
     session.delete(:user)
-    session.delete(:order)
-    session.delete(:fishuserid)
     redirect "/"
   end
 
-  post '/order' do
+  post "/order" do
     session[:order] = params[:alphabetize]
     redirect "/"
   end
 
-  post '/delete' do
-    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username_to_delete].downcase}'")
+
+  get "/delete/:username" do
+    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username]}'")
     redirect "/"
   end
 
-  post '/fish' do
-    @database_connection.sql("INSERT INTO fish (fishname, fishwiki, user_id) VALUES ('#{params[:fishname]}', '#{params[:fishwiki]}', '#{session[:user]["id"].to_i}')")
+  post "/add_fish" do
+    @database_connection.sql("INSERT INTO fish (fish_name, wikipage, user_id) VALUES ('#{params[:fish_name]}','#{params[:wikipage]}', '#{session[:user]["id"].to_i}')")
     redirect "/"
   end
+
+  get "/wikipedia/:fish_name" do
+    @database_connection.sql("SELECT wikipage FROM fish WHERE fish_name = '#{params[:fish_name]}'")
+  end
+
+  private
 
   def find_user(username, password)
     @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password.downcase}'")
   end
 
-
   def user_setter
-    @database_connection.sql("SELECT username from users").collect { |hash| hash["username"] }
+    @database_connection.sql("SELECT username FROM users").collect { |hash| hash["username"] }
   end
 
-  def fish_getter
-    @database_connection.sql("SELECT * from fish")
+  def fish_setter
+    @database_connection.sql("SELECT * FROM fish")
   end
 
-  def database_cleaner
-    @database_connection.sql("DELETE FROM users WHERE username = 'User'")
+  def delete_user
+    @database_connection.sql("DELETE FROM users WHERE username = '#{}'")
   end
+
 end

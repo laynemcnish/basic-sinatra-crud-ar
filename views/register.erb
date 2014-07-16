@@ -1,0 +1,32 @@
+<h1>Register for fish.ly!</h1>
+
+<fieldset>
+  <legend>Information</legend>
+
+  <form action="/register" method="post" style="display: inline;">
+
+
+
+
+    <% if flash[:error] %>
+      <p class="error"><%= flash[:error] %></p>
+    <% end %>
+
+    <div class="form-element">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"/>
+    </div>
+
+    <div class="form-element">
+    <label for="password">Password: </label>
+    <input type="password" id="password" name="password"/>
+    </div>
+
+
+    <p></p>
+
+    <input type="submit" class="button" value="Register"/>
+
+
+  </form>
+</fieldset>

@@ -1,0 +1,140 @@
+<!--LOGGED IN-->
+
+<% unless session[:user] == nil %>
+  <h1>The Login Page</h1>
+
+  <h1>Welcome, <%= session[:user]["username"] %>!</h1>
+
+  <form action="/logout" method="post">
+
+    <input type="submit" class="button" value="logout"/>
+
+  </form>
+
+  <!-- List of users -->
+
+  <h2>Users:</h2>
+
+  <!-- add table with 2 columns (Username, Actions - contains delete button) -->
+  <table border="1" style="width:300px">
+    <tr>
+      <td><%= "Username" %></td>
+      <td><%= "Actions" %></td>
+    </tr>
+
+
+  <% @users.each do |user| %>
+    <% unless user == (session[:user]["username"]) %>
+      <tr>
+        <td><%= user %></td>
+        <td><a href="/delete/<%= user %>">Delete</a></td>
+        </tr>
+    <% end %>
+  <% end %>
+
+
+  </table>
+
+  <form method="post" action="/order" id="alphabetize">
+    <select name="alphabetize" form="alphabetize">
+      <option value="ASC">From A - Z</option>
+      <option value="DESC">From Z - A</option>
+    </select>
+    <input class="button" type="submit" value="Order"/>
+  </form>
+
+
+
+  <!--ADDING FISH-->
+  <table border="1" style="width:300px">
+    <tr>
+      <td><%= "Name" %></td>
+      <td><%= "Actions" %></td>
+    </tr>
+
+
+    <% @fish.each do |fish| %>
+      <% if fish[:user_id] == session[:user]["id"] %>
+        <tr>
+          <td><%= fish %></td>
+          <td><a href="/wikipedia/<%= fish %>">Wikipedia</a></td>
+        </tr>
+      <% end %>
+    <% end %>
+
+
+  </table>
+
+
+  <h2>Fishies:</h2>
+  <!-- add table with two columns and separate wikipedia link from names -->
+<ul>
+  <% @fish.each do |fish| %>
+
+    <% if fish[:user_id] == session[:user]["id"] %>
+
+      <a href="<%= fish["wikipage"] %>">
+        <li><%= fish["fish_name"] %></li>
+      </a>
+
+    <% end %>
+  <% end %>
+  </ul>
+
+  <form method="post" action="/add_fish" id="add_fish">
+
+    <label for="fish_name">Fish name:</label>
+    <input type="text" id="fish_name" name="fish_name"/>
+
+    <label for="wikipage">Wikipage: </label>
+    <input type="url" id="wikipage" name="wikipage"/>
+
+    <input type="submit" class="button" value="Add Fish"/>
+
+  </form>
+
+<% end %>
+
+<!--LOGGED OUT-->
+
+<% if session[:user] == nil %>
+
+  <% if flash[:notice] %>
+    <p class="notice"><%= flash[:notice] %></p>
+  <% end %>
+
+
+
+  <a href="/register">
+    <input type="submit" class="button_big" value="Register"/>
+  </a>
+
+
+  <h1>OR</h1>
+
+
+  <% if flash[:error] %>
+    <p class="error"><%= flash[:error] %></p>
+  <% end %>
+
+
+  <form action="/sessions" method="post">
+
+    <div class="form-element">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username"/>
+    </div>
+
+    <div class="form-element">
+      <label for="password">Password: </label>
+      <input type="password" id="password" name="password"/>
+    </div>
+
+    <p></p>
+
+    <input type="submit" class="button" value="Login"/>
+
+  </form>
+
+
+<% end %>
