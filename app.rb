@@ -23,9 +23,10 @@ class App < Sinatra::Application
 
   get "/" do
     @users = @users_table.user_setter
-    @fish = @fish_table.find_fish(session[:user]["id"])
 
-
+    if session[:user]
+      @fish = @fish_table.find_fish(session[:user]["id"])
+    end
     if session[:order]
       @users = @users_table.alphabetize(session[:order])
     end
@@ -73,14 +74,14 @@ class App < Sinatra::Application
     if (params[:username] || params[:password]) == ""
       flash[:error] = "Please fill in all fields."
       redirect "/register"
-    elsif  @database_connection.sql("SELECT * FROM users WHERE username = '#{params[:username].downcase}'") != []
+    elsif  @users_table.find_username(params[:username])
       flash[:error] = " Username is already taken."
       redirect "/register"
 
     end
 
     flash[:notice] = "Thank you for registering"
-    @database_connection.sql("INSERT INTO users (username, password) VALUES ('#{params[:username]}','#{params[:password]}')")
+    @users = @users_table.create(params[:username],params[:password])
     redirect "/"
   end
 
@@ -96,7 +97,7 @@ class App < Sinatra::Application
 
 
   get "/delete/:username" do
-    @database_connection.sql("DELETE FROM users WHERE username = '#{params[:username]}'")
+    @users_table.delete_user(params[:username])
     redirect "/"
   end
 
@@ -104,10 +105,5 @@ class App < Sinatra::Application
     @fish_table.create_fish(params["fish_name"], params["wikipage"], session[:user]["id"])
     redirect "/"
   end
-
-  get "/wikipedia/:fish_name" do
-    @database_connection.sql("SELECT wikipage FROM fish WHERE fish_name = '#{params[:fish_name]}'")
-  end
-
 
 end
