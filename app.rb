@@ -37,6 +37,9 @@ class App < Sinatra::Application
     erb :register
   end
 
+  get "/add_fish" do
+    erb :new_fish
+  end
 
   post "/sessions" do
 
@@ -101,6 +104,11 @@ class App < Sinatra::Application
   end
 
   post "/add_fish" do
+    if params[:fish_name] == ""
+      flash[:error] = "Fish must have a name."
+      redirect "/add_fish"
+   end
+
     @fish_table.create_fish(params["fish_name"], params["wikipage"], session[:user]["id"])
     redirect "/"
   end

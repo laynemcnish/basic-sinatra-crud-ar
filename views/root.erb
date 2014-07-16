@@ -64,27 +64,14 @@
 
       <tr>
         <td><%= fish["fish_name"] %></td>
-        <td><a href="<%= fish["wikipage"] %>">Wikipedia</a></td>
+        <td><a href="<%= fish["wikipage"] %>" target="_blank">Wikipedia</a></td>
       </tr>
     <% end %>
   </table>
   <p></p>
-  <form action="/add_fish" method="post" style="display: inline;">
-
-    <div class="form-element">
-      <label for="fish_name">Fish name:</label>
-      <input type="text" id="fish_name" name="fish_name" required/>
-    </div>
-
-    <div class="form-element">
-      <label for="wikipage">Wikipage: </label>
-      <input type="url" id="wikipage" name="wikipage" required/>
-    </div>
-    <p></p>
-    <input type="submit" class="button" value="Add Fish"/>
-
-
-  </form>
+  <a href="/add_fish">
+    <input type="submit" class="button_big" value="Create Fish"/>
+  </a>
 
 <% end %>
 

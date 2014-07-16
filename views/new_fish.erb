@@ -1,0 +1,27 @@
+<h1>Create a new fish</h1>
+
+<fieldset>
+  <legend>Information</legend>
+
+  <% if flash[:error] %>
+    <p class="error"><%= flash[:error] %></p>
+  <% end %>
+
+<form action="/add_fish" method="post" style="display: inline;">
+
+  <div class="form-element">
+    <label for="fish_name">Fish name:</label>
+    <input type="text" id="fish_name" name="fish_name"/>
+  </div>
+
+  <div class="form-element">
+    <label for="wikipage">Wikipage: </label>
+    <input type="url" id="wikipage" name="wikipage" required/>
+  </div>
+  <p></p>
+  <input type="submit" class="button" value="Add Fish"/>
+
+
+</form>
+
+  </fieldset>
