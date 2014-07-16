@@ -2,6 +2,8 @@ require "sinatra"
 require "active_record"
 require "rack-flash"
 require "gschool_database_connection"
+require "./lib/users_table"
+require "./lib/fish_table"
 
 class App < Sinatra::Application
   enable :sessions
@@ -10,16 +12,22 @@ class App < Sinatra::Application
 
   def initialize
     super
-
-    @database_connection = GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
+    @users_table = UsersTable.new(
+      GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
+    )
+    @fish_table = FishTable.new(
+      GschoolDatabaseConnection::DatabaseConnection.establish(ENV["RACK_ENV"])
+    )
   end
 
 
   get "/" do
-    @users = user_setter
-    @fish = fish_setter
+    @users = @users_table.user_setter
+    @fish = @fish_table.fish_setter
 
-    @users = @database_connection.sql("SELECT username FROM users ORDER BY username #{session[:order]}").collect { |hash| hash["username"] } if session[:order]
+    if session[:order]
+      @users = @users_table.alphabetize(session[:order])
+    end
     erb :root, :locals => {:users => @users, :fish => @fish}
   end
 
@@ -53,7 +61,6 @@ class App < Sinatra::Application
       redirect "/"
 
     end
-    user = @database_connection.sql("select * from users where username = '#{params[:username]}' and password = '#{params[:password]}'").first
     session[:user] = user
     redirect "/"
 
@@ -93,7 +100,7 @@ class App < Sinatra::Application
   end
 
   post "/add_fish" do
-    @database_connection.sql("INSERT INTO fish (fish_name, wikipage, user_id) VALUES ('#{params["fish_name"]}','#{params["wikipage"]}', '#{session[:user]["id"].to_i}')")
+    @fish_table.create_fish(params["fish_name"], params["wikipage"], session[:user]["id"])
     redirect "/"
   end
 
@@ -101,22 +108,5 @@ class App < Sinatra::Application
     @database_connection.sql("SELECT wikipage FROM fish WHERE fish_name = '#{params[:fish_name]}'")
   end
 
-  private
-
-  def find_user(username, password)
-    @database_connection.sql("SELECT * FROM users WHERE username = '#{username.downcase}' AND password = '#{password.downcase}'")
-  end
-
-  def user_setter
-    @database_connection.sql("SELECT username FROM users").collect { |hash| hash["username"] }
-  end
-
-  def fish_setter
-    @database_connection.sql("SELECT * FROM fish")
-  end
-
-  def delete_user
-    @database_connection.sql("DELETE FROM users WHERE username = '#{}'")
-  end
 
 end

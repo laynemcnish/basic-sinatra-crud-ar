@@ -64,7 +64,8 @@
 
 
     <% @fish.each do |fish| %>
-      <% if fish["user_id"] == session[:user]["id"] %>
+      <% if (fish[:user_id].to_i) == session[:user]["id"] %>
+
         <tr>
           <td><%= fish["fish_name"] %></td>
           <td><a href="/wikipedia/<%= fish["wikipage"] %>">Wikipedia</a></td>
