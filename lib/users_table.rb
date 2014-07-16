@@ -15,7 +15,7 @@ class UsersTable
 
   def alphabetize(order)
     alphabetize = <<-SQL
-      SELECT username FROM users ORDER BY username #{session[order]}
+      SELECT username FROM users ORDER BY username #{order}
     SQL
 
   @database_connection.sql(alphabetize).collect { |hash| hash["username"] }

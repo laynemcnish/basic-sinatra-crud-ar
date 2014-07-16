@@ -5,15 +5,9 @@
 
   <h1>Welcome, <%= session[:user]["username"] %>!</h1>
 
-  <form action="/logout" method="post">
-
-    <input type="submit" class="button" value="logout"/>
-
-  </form>
-
   <!-- List of users -->
 
-  <h2>Users:</h2>
+  <h2>Users</h2>
 
   <!-- add table with 2 columns (Username, Actions - contains delete button) -->
   <table border="1" style="width:300px">
@@ -50,7 +44,7 @@
 
 
 
-  <h2>Fishies:</h2>
+  <h2>Fishies</h2>
   <!-- add table with two columns and separate wikipedia link from names -->
 
 
@@ -72,6 +66,14 @@
   <a href="/add_fish">
     <input type="submit" class="button_big" value="Create Fish"/>
   </a>
+
+  <p></p>
+  <p></p>
+  <form action="/logout" method="post">
+
+    <input type="submit" class="button" value="Logout"/>
+
+  </form>
 
 <% end %>
 
