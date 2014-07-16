@@ -4,13 +4,6 @@ class FishTable
     @database_connection = database_connection
   end
 
-  def fish_setter
-  fish_setter = <<-SQL
-    SELECT * FROM fish
-  SQL
-  @database_connection.sql(fish_setter)
-  end
-
   def create_fish(fish_name, wikipage, user_id)
     create_fish = <<-SQL
     INSERT INTO fish (fish_name, wikipage, user_id)
@@ -19,6 +12,9 @@ class FishTable
     @database_connection.sql(create_fish)
   end
 
+  def find_fish(user_id)
+    @database_connection.sql("select * from fish where user_id=#{user_id}")
+  end
 
 
 end

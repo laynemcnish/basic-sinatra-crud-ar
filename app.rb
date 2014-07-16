@@ -23,7 +23,8 @@ class App < Sinatra::Application
 
   get "/" do
     @users = @users_table.user_setter
-    @fish = @fish_table.fish_setter
+    @fish = @fish_table.find_fish(session[:user]["id"])
+
 
     if session[:order]
       @users = @users_table.alphabetize(session[:order])
@@ -38,7 +39,7 @@ class App < Sinatra::Application
 
   post "/sessions" do
 
-    user = find_user(params[:username], params[:password])[0]
+    user = @users_table.find_user(params[:username], params[:password])
 
     if user != nil
       session[:user] = user
@@ -61,7 +62,7 @@ class App < Sinatra::Application
       redirect "/"
 
     end
-    session[:user] = user
+    session[:user]
     redirect "/"
 
 

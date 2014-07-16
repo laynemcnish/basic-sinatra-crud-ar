@@ -54,26 +54,21 @@
   <!-- add table with two columns and separate wikipedia link from names -->
 
 
-
-
   <table border="1" style="width:300px">
     <tr>
       <td><%= "Name" %></td>
       <td><%= "Actions" %></td>
     </tr>
 
-
     <% @fish.each do |fish| %>
-      <% if (fish[:user_id].to_i) == session[:user]["id"] %>
 
-        <tr>
-          <td><%= fish["fish_name"] %></td>
-          <td><a href="/wikipedia/<%= fish["wikipage"] %>">Wikipedia</a></td>
-        </tr>
-      <% end %>
+      <tr>
+        <td><%= fish["fish_name"] %></td>
+        <td><a href="/wikipedia/<%= fish["wikipage"] %>">Wikipedia</a></td>
+      </tr>
     <% end %>
   </table>
-<p></p>
+  <p></p>
   <form action="/add_fish" method="post" style="display: inline;">
 
     <div class="form-element">
