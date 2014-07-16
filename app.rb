@@ -83,7 +83,7 @@ class App < Sinatra::Application
     end
 
     flash[:notice] = "Thank you for registering"
-    @users = @users_table.create(params[:username],params[:password])
+    @users = @users_table.create(params[:username], params[:password])
     redirect "/"
   end
 
@@ -107,7 +107,7 @@ class App < Sinatra::Application
     if params[:fish_name] == ""
       flash[:error] = "Fish must have a name."
       redirect "/add_fish"
-   end
+    end
 
     @fish_table.create_fish(params["fish_name"], params["wikipage"], session[:user]["id"])
     redirect "/"

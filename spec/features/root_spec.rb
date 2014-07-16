@@ -57,8 +57,9 @@ feature "able to create a fish" do
   scenario "user should be able to enter a fish name and wikipage" do
     i_am_registered
     i_am_logged_in
+    visit("/add_fish")
     fill_in('fish_name', :with => 'blowfish')
-    fill_in('Wikipage', :with=> 'http://en.wikipedia.org/wiki/Blowfish_(cipher)')
+    fill_in('wikipage', :with => 'http://en.wikipedia.org/wiki/Blowfish_(cipher)')
     click_button 'Add Fish'
     expect(page).to have_content('blowfish')
 
