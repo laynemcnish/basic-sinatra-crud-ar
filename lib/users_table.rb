@@ -36,7 +36,7 @@ class UsersTable
     user_setter = <<-SQL
     SELECT username FROM users
     SQL
-    @database_connection.sql(user_setter).collect { |hash| hash["id"] }
+    @database_connection.sql(user_setter).collect { |hash| hash["username"] }
   end
 
   def delete_user(username)

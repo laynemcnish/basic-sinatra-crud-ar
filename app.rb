@@ -26,7 +26,7 @@ class App < Sinatra::Application
 
     if session[:user]
       @fish = @fish_table.find_fish(session[:user]["id"])
-      @users = @users_table
+     
     end
     if session[:order]
       @users = @users_table.alphabetize(session[:order])
