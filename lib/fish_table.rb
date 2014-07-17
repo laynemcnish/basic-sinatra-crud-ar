@@ -19,6 +19,13 @@ class FishTable
     @database_connection.sql(find_fish)
   end
 
+  def find_by_id(fish_id)
+    find_fish_id = <<-SQL
+    SELECT * from fish where id = #{fish_id}
+    SQL
+    @database_connection.sql(find_fish_id)
+  end
+
 
 
 

@@ -1,36 +1,33 @@
+<h2><%= params[:fish_user] %>'s Fish:</h2>
 
-  <h2><%= params[:fish_user] %>'s Fish:</h2>
+<table border="1" style="width:300px">
+  <tr>
+    <td><%= "Name" %></td>
+    <td><%= "Action" %></td>
+    <td><%= "Favorite" %></td>
+  </tr>
 
-  <table border="1" style="width:300px">
+  <% @fish.each do |fish| %>
+
+
     <tr>
-      <td><%= "Name" %></td>
-      <td><%= "Action" %></td>
-      <td><%= "Favorite" %></td>
+      <td><%= fish["fish_name"] %></td>
+      <td><a href="<%= fish["wikipage"] %>" target="_blank">Wikipedia</a></td>
+
+
+      <td><a href="/add_favorite/<%= fish["id"] %>">Favorite</a></td>
+
     </tr>
 
-    <% @fish.each do |fish| %>
+  <% end %>
 
 
-      <tr>
-        <td><%= fish["fish_name"] %></td>
-        <td><a href="<%= fish["wikipage"] %>" target="_blank">Wikipedia</a></td>
-
-        <% unless session[:favorite] %>
-          <form action="/favorite" method="post">
-        <td><input type="submit" class="small_button" value="Favorite!"/></td>
-          </form>
-        <% if session[:favorite] %>
-            <form action="/favorite" method="post">
-              <td><input type="submit" class="small_button" value="Favorited"/></td>
-            </form>
-      </tr>
-            <%end%>
-          <% end %>
-
-    <% end %>
-  </table>
+</table>
 <p></p>
 
-  <form action="/" method="get">
-    <input type="submit" class="button" value="Back to Homepage"/>
-  </form>
+<form action="/" method="get">
+  <input type="submit" class="button" value="Back to Homepage"/>
+</form>
+
+
+
