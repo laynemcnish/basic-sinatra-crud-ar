@@ -41,6 +41,20 @@ class App < Sinatra::Application
     erb :new_fish
   end
 
+  get "/delete/:username" do
+    @users_table.delete_user(params[:username])
+    redirect "/"
+  end
+
+  get "/fish/:fish_user" do
+    fish_user = @users_table.find(params[:fish_user])
+    session[:fishuserid] = fish_user["id"]
+    @fish = @fish_table.find_fish(fish_user["id"])
+    puts @fish
+    erb :display_fish, :locals => {:fish => @fish, :users => @users, :fish_user => fish_user}
+  end
+
+
   post "/sessions" do
 
     user = @users_table.find_user(params[:username], params[:password])
@@ -97,11 +111,6 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-
-  get "/delete/:username" do
-    @users_table.delete_user(params[:username])
-    redirect "/"
-  end
 
   post "/add_fish" do
     if params[:fish_name] == ""

@@ -6,7 +6,7 @@ class UsersTable
   def create(username, password)
     insert_user_sql = <<-SQL
       INSERT INTO users (username, password)
-      VALUES ('#{username}', '#{password}')
+      VALUES ('#{username.downcase}', '#{password.downcase}')
       RETURNING id
     SQL
 
@@ -36,7 +36,7 @@ class UsersTable
     user_setter = <<-SQL
     SELECT username FROM users
     SQL
-    @database_connection.sql(user_setter).collect { |hash| hash["username"] }
+    @database_connection.sql(user_setter).collect { |hash| hash["id"] }
   end
 
   def delete_user(username)
@@ -46,22 +46,31 @@ class UsersTable
     @database_connection.sql(delete_user).first
   end
 
-  #
-  #
-  # def find(id)
-  #   find_sql = <<-SQL
-  #     SELECT * FROM users
-  #     WHERE id = #{id}
-  #   SQL
-  #
-  #   @database_connection.sql(find_sql).first
-  # end
-  #
+
+
+  def find(username)
+    find_sql = <<-SQL
+      SELECT * FROM users
+      WHERE username = '#{username}'
+    SQL
+
+    @database_connection.sql(find_sql).first
+  end
+
   def find_by(username, password)
     find_by_sql = <<-SQL
       SELECT * FROM users
       WHERE username = '#{username}'
       AND password = '#{password}'
+    SQL
+
+    @database_connection.sql(find_by_sql).first
+  end
+
+  def find_by_id(id)
+    find_by_sql = <<-SQL
+      SELECT username FROM users
+      WHERE id = #{id}
     SQL
 
     @database_connection.sql(find_by_sql).first

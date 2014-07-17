@@ -1,7 +1,7 @@
 <!--LOGGED IN-->
 
 <% unless session[:user] == nil %>
-  <h1>The Login Page</h1>
+
 
   <h1>Welcome, <%= session[:user]["username"] %>!</h1>
 
@@ -18,9 +18,10 @@
 
 
     <% @users.each do |user| %>
+
       <% unless user == (session[:user]["username"]) %>
         <tr>
-          <td><%= user %></td>
+          <td><a href="/fish/<%= user%>"><%= user %></a></td>
           <td><a href="/delete/<%= user %>">Delete</a></td>
         </tr>
       <% end %>
@@ -53,7 +54,6 @@
       <td><%= "Name" %></td>
       <td><%= "Actions" %></td>
     </tr>
-
     <% @fish.each do |fish| %>
 
       <tr>
@@ -62,6 +62,7 @@
       </tr>
     <% end %>
   </table>
+
   <p></p>
   <a href="/add_fish">
     <input type="submit" class="button_big" value="Create Fish"/>
