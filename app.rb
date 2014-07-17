@@ -26,6 +26,7 @@ class App < Sinatra::Application
 
     if session[:user]
       @fish = @fish_table.find_fish(session[:user]["id"])
+      @users = @users_table.user_setter
     end
     if session[:order]
       @users = @users_table.alphabetize(session[:order])
@@ -85,8 +86,10 @@ class App < Sinatra::Application
   end
 
   post "/register" do
-
-    if (params[:username] || params[:password]) == ""
+    if params[:username] == ""
+      flash[:error] = "Please fill in all fields."
+      redirect "/register"
+    elsif params[:password] == ""
       flash[:error] = "Please fill in all fields."
       redirect "/register"
     elsif  @users_table.find_username(params[:username])
