@@ -21,7 +21,7 @@
 
       <% unless user == (session[:user]["username"]) %>
         <tr>
-          <td><a href="/fish/<%= user%>"><%= user %></a></td>
+          <td><a href="/<%= user%>"><%= user %></a></td>
           <td><a href="/delete/<%= user %>">Delete</a></td>
         </tr>
       <% end %>

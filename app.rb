@@ -46,11 +46,10 @@ class App < Sinatra::Application
     redirect "/"
   end
 
-  get "/fish/:fish_user" do
+  get "/:fish_user" do
     fish_user = @users_table.find(params[:fish_user])
     session[:fishuserid] = fish_user["id"]
     @fish = @fish_table.find_fish(fish_user["id"])
-    puts @fish
     erb :display_fish, :locals => {:fish => @fish, :users => @users, :fish_user => fish_user}
   end
 
