@@ -52,8 +52,11 @@ class App < Sinatra::Application
   end
 
   get "/:fish_user" do
+
     fish_user = @users_table.find(params[:fish_user])
+
     @fish = @fish_table.find_fish(fish_user["id"])
+
     erb :display_fish, :locals => {:fish => @fish, :users => @users, :fish_user => fish_user}
 
   end
@@ -61,7 +64,13 @@ class App < Sinatra::Application
   get "/add_favorite/:id" do
     fish = @fish_table.find_by_id(params[:id]).first
     @favorite_fish = @favorite_fish_table.add_favorite(session[:user]["id"], fish["id"])
-    puts session[:user]["id"]
+
+    redirect back
+  end
+
+  get "/delete_favorite/:id" do
+    fish = @fish_table.find_by_id(params[:id]).first
+    @favorite_fish = @favorite_fish_table.delete_favorite(session[:user]["id"], fish["id"])
     redirect back
   end
 
@@ -122,12 +131,6 @@ class App < Sinatra::Application
     session[:order] = params[:alphabetize]
     redirect "/"
   end
-
-  post "/favorite" do
-    session[:favorite]
-    redirect "/:fish_user"
-  end
-
 
   post "/add_fish" do
     if params[:fish_name] == ""

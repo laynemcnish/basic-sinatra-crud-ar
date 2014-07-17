@@ -15,7 +15,11 @@
       <td><a href="<%= fish["wikipage"] %>" target="_blank">Wikipedia</a></td>
 
 
-      <td><a href="/add_favorite/<%= fish["id"] %>">Favorite</a></td>
+      <% if @favorite_fish_table.find_favorite(session[:user]["id"], fish["id"]) == [] %>
+        <td><a href="/add_favorite/<%= fish["id"] %>">Favorite</a></td>
+      <% else %>
+        <td><a href="/delete_favorite/<%= fish["id"] %>">Favorited!</a></td>
+      <% end %>
 
     </tr>
 
@@ -28,6 +32,3 @@
 <form action="/" method="get">
   <input type="submit" class="button" value="Back to Homepage"/>
 </form>
-
-
-

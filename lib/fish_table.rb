@@ -26,6 +26,12 @@ class FishTable
     @database_connection.sql(find_fish_id)
   end
 
+  def find_favorites(user_id, fish_id)
+    find_favorites = <<-SQL
+    SELECT * from fish where user_id = #{user_id} and id = #{fish_id}
+    SQL
+    @database_connection.sql(find_favorites)
+  end
 
 
 
