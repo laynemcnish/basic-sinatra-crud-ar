@@ -26,7 +26,7 @@ class App < Sinatra::Application
 
     if session[:user]
       @fish = @fish_table.find_fish(session[:user]["id"])
-     
+
     end
     if session[:order]
       @users = @users_table.alphabetize(session[:order])
@@ -51,6 +51,9 @@ class App < Sinatra::Application
     fish_user = @users_table.find(params[:fish_user])
     session[:fishuserid] = fish_user["id"]
     @fish = @fish_table.find_fish(fish_user["id"])
+    if session[:favorite]
+
+    end
     erb :display_fish, :locals => {:fish => @fish, :users => @users, :fish_user => fish_user}
   end
 
@@ -111,6 +114,11 @@ class App < Sinatra::Application
   post "/order" do
     session[:order] = params[:alphabetize]
     redirect "/"
+  end
+
+  post "/favorite" do
+    session[:favorite]
+    redirect "/:fish_user"
   end
 
 
